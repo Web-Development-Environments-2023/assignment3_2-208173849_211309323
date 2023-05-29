@@ -38,8 +38,23 @@ async function getRecipeDetails(recipe_id) {
 }
 
 
+async function getRandom()
+{
+    let queryURL = `${api_domain}/random?number=3&apiKey=${process.env.spooncular_apiKey}`
+    let queryResult = await axios.get(queryURL)
+
+    const num_of_recipes = 3
+    let res = []
+
+    for(let k=0;k<num_of_recipes;k++)
+        res.push(await getRecipeDetails(queryResult.data['recipes'][k].id))
+
+    return res
+}
+
+
 
 exports.getRecipeDetails = getRecipeDetails;
-
+exports.getRandom = getRandom
 
 
