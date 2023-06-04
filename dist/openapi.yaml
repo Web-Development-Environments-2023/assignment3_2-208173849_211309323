@@ -133,6 +133,168 @@ paths:
                 $ref: '#/components/schemas/RecipePreview'
         "404":
           description: recipeId is not exists
+  /users/watched:
+    get:
+      tags:
+      - Users
+      summary: Get a user's last seen recipes.
+      description: Return user 3 last seen recipes.
+      operationId: lastSeen
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized.
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Users
+      summary: add recie to watched recipes.
+      description: add recie to watched recipes.
+      operationId: watched
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized.
+      
+      security:
+      - bearerAuth: []
+  /users/addRecipes:
+    post:
+      tags:
+      - Users
+      summary: Create a new recipe.
+      operationId: createRecipe
+
+      responses:
+        "201":
+          description: recipe was created.
+
+        "400":
+          description: Properties not set.
+  
+        "401":
+          description: Unauthorized.
+
+        "500":
+          description: Internal Server Error.
+
+      security:
+      - bearerAuth: []
+  /users/showMyRecipes:
+    get:
+      tags:
+      - Users
+      summary: show my recipes.
+      operationId: showRecipe
+      responses:
+        "201":
+          description: recipe was created.
+
+        "400":
+          description: Properties not set.
+
+        "401":
+          description: Unauthorized.
+
+
+        "500":
+          description: Internal Server Error.
+
+      security:
+      - bearerAuth: []
+  /users/addFamilyRecipes:
+    post:
+      tags:
+      - Users
+      summary: Create a new famliy recipe.
+      operationId: createfamliyRecipe
+      responses:
+        "201":
+          description: recipe was created.
+        "400":
+          description: Properties not set.
+        "401":
+          description: Unauthorized.
+        "500":
+          description: Internal Server Error.
+
+      security:
+      - bearerAuth: []
+  /users/ShowfamilyRecips:
+    get:
+      tags:
+      - Users
+      summary: show my famliy recipes.
+      operationId: showfamliyRecipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/my_recipes'
+        required: true
+      responses:
+        "201":
+          description: recipe was created.
+        "400":
+          description: Properties not set.
+        "401":
+          description: Unauthorized.
+
+
+        "500":
+          description: Internal Server Error.
+
+      security:
+      - bearerAuth: []
+  /recipes/random:
+    get:
+      tags:
+      - Recipes
+      summary: Display 3 random recipes
+      description: Display 3 random recipes
+      responses:
+        "200":
+          description: random recipes
+
+        "404":
+          description: recipe not found.
+
+        "500":
+          description: Internal Server Error.
+
+  /recipes/search:
+    get:
+      tags:
+      - Recipes
+      summary: Search for recipes
+      parameters:
+      - name: name
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/country'
+      - name: country
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/country'
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: recipe not found.
+
+        "500":
+          description: Internal Server Error.
+
+
 components:
   schemas:
     User:
@@ -169,11 +331,11 @@ components:
           type: string
           description: user's email
           example: my_name12@gmail.com
-        # image-url:
-        #   pattern: URL
-        #   type: string
-        #   description: URL for the user's image
-        #   example: https://cloudinary.com/
+        image-url:
+          pattern: URL
+          type: string
+          description: URL for the user's image
+          example: https://cloudinary.com/
       description: Model containing user info
     LoginScheme:
       type: object
@@ -227,4 +389,67 @@ components:
           type: boolean
           description: indication if the recipe is gluten free
           example: false
-  
+    my_recipes:
+      required:
+      - extended_ingredients
+      - gluten_free
+      - image
+      - instructions
+      - likes
+      - ready_in
+      - serving
+      - title
+      - vegan
+      - vegetarian
+      type: object
+      properties:
+        title:
+          type: string
+          example: Spaghetti Carbonara
+        ready_in_minutes:
+          type: number
+          example: 25
+        aggregate_likes:
+          type: number
+          example: 1217
+        serving:
+          type: number
+          example: 6
+        vegetarian:
+          type: boolean
+          example: true
+        vegan:
+          type: boolean
+          example: true
+        gluten_free:
+          type: boolean
+          example: false
+        image:
+          type: string
+          example: https://spoonacular.com/recipeImages/535835-556x370.jpg
+        instructions:
+          type: string
+          example: "1.meat \n 2. prepare "
+        extended_ingredients:
+          type: array
+          items:
+            $ref: '#/components/schemas/IngredientInRecipe'
+    country:
+      type: string
+      enum:
+      - African
+      - Indian
+      - Irish
+      - Italian
+      - Japanese
+      - American
+      - British
+      - Cajun
+      - Caribbean
+      - Chinese
+      - Eastern European
+      - European
+      - French
+      - German
+      - Greek
+      - Korean  
